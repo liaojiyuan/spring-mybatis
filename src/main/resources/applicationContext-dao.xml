@@ -29,16 +29,6 @@
         <property name="dataSource" ref="dataSource"/>
     </bean>
 
-    <!--<bean id="empMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">-->
-        <!--<property name="mapperInterface" value="com.wusong.hanukkah.dao.mysql.EmpMapper"/>-->
-        <!--<property name="sqlSessionFactory" ref="sqlSessionFactory"/>-->
-    <!--</bean>-->
-
-    <!--<bean id="deptMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">-->
-        <!--<property name="mapperInterface" value="com.wusong.hanukkah.dao.mysql.DeptMapper"/>-->
-        <!--<property name="sqlSessionFactory" ref="sqlSessionFactory"/>-->
-    <!--</bean>-->
-
     <!-- 将会查找类路径下的映射器并自动将它们创建成 MapperFactoryBean -->
     <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
         <property name="basePackage" value="com.wusong.hanukkah.dao.mysql" />

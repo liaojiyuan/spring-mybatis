@@ -6,13 +6,13 @@ import java.util.Date;
  * Created by weilei on 15/8/22.
  */
 public class Emp {
-    private int empno;//员工编码
-    private String ename;//员工名称
-    private String job;//职位
-    private int mgr;//上级编号
-    private Date hiredate;//入职时间
-    private double sale;//工资
-    private double comm;//奖金
+    private int empno;
+    private String ename;
+    private String job;
+    private int mgr;
+    private Date hiredate;
+    private double sale;
+    private double comm;
     private Dept dept;
 
     public Emp() {

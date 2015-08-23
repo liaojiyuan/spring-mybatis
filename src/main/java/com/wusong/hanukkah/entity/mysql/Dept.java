@@ -6,9 +6,9 @@ import java.util.List;
  * Created by weilei on 15/8/22.
  */
 public class Dept {
-    private int deptno;//部门编号
-    private String dname;//部门名称
-    private String location;//部门所在地
+    private int deptno;
+    private String dname;
+    private String location;
     private List<Emp> emps;
 
     public Dept() {

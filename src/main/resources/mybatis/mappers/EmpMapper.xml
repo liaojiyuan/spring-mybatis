@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>  <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wusong.hanukkah.dao.mysql.EmpMapper">
+
+    <resultMap type="com.wusong.hanukkah.entity.mysql.Emp" id="EMP_RESULTMAP_BASE">
+        <id column="empno" property="empno"/>
+        <result column="ename" property="ename"/>
+        <result column="job" property="job"/>
+        <result column="hiredate" property="hiredate"/>
+        <result column="mgr" property="mgr"/>
+        <result column="sale" property="sale"/>
+        <result column="comm" property="comm"/>
+    </resultMap>
+
+    <resultMap type="com.wusong.hanukkah.entity.mysql.Emp" id="EMP_RESULTMAP" extends="EMP_RESULTMAP_BASE">
+        <id column="empno" property="empno"/>
+        <result column="ename" property="ename"/>
+        <result column="job" property="job"/>
+        <result column="hiredate" property="hiredate"/>
+        <result column="mgr" property="mgr"/>
+        <result column="sale" property="sale"/>
+        <result column="comm" property="comm"/>
+        <association property="dept" column="deptno" javaType="com.wusong.hanukkah.entity.mysql.Dept"
+                     resultMap="com.wusong.hanukkah.dao.mysql.DeptMapper.DEPT_RESULTMAP_BASE"></association>
+        <!-- 外键关联关系两个表的id必须一致? -->
+    </resultMap>
+
+    <sql id="allColumn">
+        empno, ename, job, mgr, hiredate, sale, comm, deptno
+    </sql>
+
+    <insert id="addEmp" parameterType="com.wusong.hanukkah.entity.mysql.Emp">
+        insert into emp(<include refid="allColumn"/>)
+        VALUES(default,#{ename}, #{job}, #{mgr}, #{hiredate}, #{sale}, #{comm}, #{dept.deptno})
+    </insert>
+
+    <insert id="addEmpWithDept" parameterType="com.wusong.hanukkah.entity.mysql.Emp">
+      INSERT INTO emp (empno,ename,job,mgr,hiredate,sale,comm,deptno)
+      VALUES(default,#{ename},#{job},#{mgr},#{hiredate},#{sale},#{comm},#{dept.deptno})
+    </insert>
+
+    <select id="getEmp" resultMap="EMP_RESULTMAP_BASE">
+        select *
+        from emp where empno = #{empno}
+    </select>
+
+    <select id="getEmpListJoinDept" resultMap="EMP_RESULTMAP">
+      SELECT * FROM emp e LEFT OUTER JOIN dept d ON e.deptno = d.deptno
+    </select>
+
+    <update id="update" parameterType="com.wusong.hanukkah.entity.mysql.Emp">
+        UPDATE emp
+        SET ename=#{emp.ename},job=#{emp.job},mgr=#{emp.mgr},hiredate=#{emp.hiredate},sale=#{emp.sale},comm=#{emp.comm}
+        WHERE empno=#{emp.empno}
+    </update>
+
+    <delete id="delete">
+      DELETE FROM emp WHERE empno = #{empno}
+    </delete>
+
+</mapper>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>  <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wusong.hanukkah.dao.mysql.DeptMapper">
+
+    <resultMap type="com.wusong.hanukkah.entity.mysql.Dept" id="DEPT_RESULTMAP_BASE">
+        <id column="deptno" property="deptno"/>
+        <result column="dname" property="dname"/>
+        <result column="location" property="location"/>
+    </resultMap>
+
+    <!-- 部门 员工 一对多 结果集--><!-- 推荐使用嵌套结果 -->
+    <resultMap type="com.wusong.hanukkah.entity.mysql.Dept" id="DEPT_RESULTMAP_JOIN" extends="DEPT_RESULTMAP_BASE">
+        <collection property="emps" ofType="com.wusong.hanukkah.entity.mysql.Emp"
+                    resultMap="com.wusong.hanukkah.dao.mysql.EmpMapper.EMP_RESULTMAP_BASE"></collection>
+    </resultMap>
+
+    <!-- dept嵌套结果 --><!-- 推荐使用嵌套结果 -->
+    <select id="getDeptJoinEmp" parameterType="_int" resultMap="DEPT_RESULTMAP_JOIN">
+       SELECT *
+       FROM dept d
+       LEFT OUTER JOIN emp e ON d.deptno = e.deptno
+       WHERE d.deptno = #{deptno}
+    </select>
+
+</mapper>

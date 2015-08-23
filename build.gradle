@@ -1,0 +1,100 @@
+buildscript {
+    repositories {
+        maven { url "http://nexus.tiantong.com/nexus/content/groups/public" }
+        maven { url "https://repo.spring.io/libs-release" }
+        mavenLocal()
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.1.10.RELEASE")
+    }
+}
+
+apply plugin: "java"
+apply plugin: "idea"
+apply plugin: "spring-boot"
+apply plugin: "war"
+
+version = "1.0"
+
+ext {
+    springFrameworkVersion = "4.1.4.RELEASE"
+}
+
+repositories {
+    maven { url "http://nexus.tiantong.com/nexus/content/groups/public" }
+    mavenLocal()
+    mavenCentral()
+    maven { url "https://repo.spring.io/libs-release" }
+    maven { url "https://repository.jboss.org/nexus/content/repositories/releases" }
+}
+
+dependencies {
+    compile(
+            "redis.clients:jedis:2.6.2",
+            "org.springframework.data:spring-data-redis:1.4.1.RELEASE",
+            "commons-beanutils:commons-beanutils:1.9.2",
+            "commons-codec:commons-codec:1.10",
+            "commons-dbcp:commons-dbcp:1.4",
+            "com.google.guava:guava:18.0",
+            "com.thoughtworks.proxytoys:proxytoys:1.0",
+            "ch.qos.logback:logback-classic:1.1.2",
+            "cglib:cglib-nodep:2.1_3",
+            "fi.evident.dalesbred:dalesbred:0.7.0",
+            "org.dalesbred:dalesbred:1.0.0",
+            "mysql:mysql-connector-java:5.1.35",
+            "org.apache.commons:commons-io:1.3.2",
+            "org.apache.commons:commons-lang3:3.3.2",
+            "org.codehaus.jackson:jackson-core-asl:1.9.13",
+            "org.codehaus.jackson:jackson-mapper-asl:1.9.13",
+            "org.mongodb.morphia:morphia:0.110",
+            "org.slf4j:slf4j-api:1.7.9",
+            "org.springframework:spring-context:${springFrameworkVersion}",
+            "org.springframework:spring-tx:${springFrameworkVersion}",
+            "org.springframework:spring-jdbc:${springFrameworkVersion}",
+            "org.springframework.boot:spring-boot-starter-web",
+            "org.apache.httpcomponents:httpcore:4.2.5",
+            "org.apache.httpcomponents:httpclient:4.2.5",
+            "org.apache.poi:poi:3.12",
+            "com.belerweb:pinyin4j:2.5.0",
+            "org.mybatis:mybatis-spring:1.2.3",
+            "org.mybatis:mybatis:3.2.8",
+    )
+
+    testCompile(
+            "junit:junit",
+            "org.springframework:spring-test:${springFrameworkVersion}"
+    )
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = "2.2.1"
+}
+
+// jar package
+jar {
+    baseName = "wusong-data-case"
+    version = version
+    mainClassName = "com.wusong.hanukkah.Helper"
+}
+task jarBootRepackage(type: BootRepackage, dependsOn: jar) {
+    mainClass = "com.wusong.hanukkah.Helper"
+    withJarTask = jar
+}
+
+// war package
+war {
+    baseName = "WebApplication"
+    version = version
+    mainClassName = "com.wusong.hanukkah.web.WebApplication"
+}
+task warBootRepackage(type: BootRepackage, dependsOn: war) {
+    mainClass = "com.wusong.hanukkah.web.WebApplication"
+    withJarTask = war
+}
+
+// all tasks
+task allTasks(dependsOn: [clean, jarBootRepackage, warBootRepackage]) {
+    jarBootRepackage.mustRunAfter clean
+    warBootRepackage.mustRunAfter jarBootRepackage
+}
